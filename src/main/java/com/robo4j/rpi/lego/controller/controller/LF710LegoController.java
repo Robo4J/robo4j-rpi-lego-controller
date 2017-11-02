@@ -24,6 +24,7 @@ import com.robo4j.ConfigurationException;
 import com.robo4j.RoboContext;
 import com.robo4j.RoboUnit;
 import com.robo4j.configuration.Configuration;
+import com.robo4j.hw.rpi.pad.LF710Button;
 import com.robo4j.hw.rpi.pad.LF710JoystickButton;
 import com.robo4j.hw.rpi.pad.LF710Message;
 import com.robo4j.hw.rpi.pad.LF710State;
@@ -36,9 +37,10 @@ import com.robo4j.units.rpi.lcd.AdafruitButtonEnum;
  * @author Marcus Hirt (@hirt)
  * @author Miro Wengner (@miragemiko)
  */
-public class LF710LegoController  extends RoboUnit<LF710Message> {
+public class LF710LegoController extends RoboUnit<LF710Message> {
 
     private String target;
+    private String targetWeapon;
     private String padInput;
 
     public LF710LegoController(RoboContext context, String id) {
@@ -49,7 +51,9 @@ public class LF710LegoController  extends RoboUnit<LF710Message> {
     protected void onInitialization(Configuration configuration) throws ConfigurationException {
         padInput = configuration.getString("padInput", null);
         target = configuration.getString("target", null);
+        targetWeapon = configuration.getString("targetWeapon", null);
 
+        System.out.println(getClass() + " init targetWeapon: " + targetWeapon + " target: " + target);
         if (target == null) {
             throw ConfigurationException.createMissingConfigNameException("target");
         }
@@ -69,6 +73,12 @@ public class LF710LegoController  extends RoboUnit<LF710Message> {
     private void sendAdafruitLcdMessage(RoboContext ctx, AdafruitButtonEnum message) {
         ctx.getReference(target).sendMessage(message);
     }
+
+    private void sendWeaponMessage(RoboContext ctx, LF710Button message){
+        System.out.println(getClass().getSimpleName() + " targetWeapon: " + targetWeapon + " message: " + message);
+        ctx.getReference(targetWeapon).sendMessage(message);
+    }
+
     /**
      * process Gamepad message, convert to Adafruit Button message and send
      *
@@ -78,7 +88,12 @@ public class LF710LegoController  extends RoboUnit<LF710Message> {
     private void processLF710Message(LF710Message message) {
         switch (message.getPart()){
             case BUTTON:
-                SimpleLoggingUtil.print(getClass(), "Gamepad Buttons are not implemented");
+                if(message.getInput().getName().equals("blue")){
+                    System.out.println(getClass().getSimpleName() + " process BLUE");
+                    sendWeaponMessage(getContext(), LF710Button.BLUE);
+                } else {
+                    SimpleLoggingUtil.print(getClass(), "Gamepad Buttons are not implemented: " + message);
+                }
                 break;
             case JOYSTICK:
                 if(message.getInput() instanceof LF710JoystickButton){

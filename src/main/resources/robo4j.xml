@@ -22,31 +22,41 @@
     <roboUnit id="httpClient">
         <class>com.robo4j.socket.http.units.HttpClientUnit</class>
         <config name="com.robo4j.root">
-            <value name="address" type="String">192.168.178.26</value>
+            <value name="address" type="String">192.168.0.6</value>
             <value name="port" type="int">8025</value>
             <value name="mode" type="boolean">true</value>
-            <value name="targetUnits" type="String">{"controller":"POST"}</value>
+            <value name="targetUnits" type="String">{"controller":"POST", "weaponController":"POST"}</value>
         </config>
     </roboUnit>
-    <roboUnit id="httpServer">
-        <class>com.robo4j.socket.http.units.HttpServerUnit</class>
-        <config name="com.robo4j.root">
-            <value name="port" type="int">8025</value>
-        </config>
-    </roboUnit>
+    <!--<roboUnit id="httpServer">-->
+        <!--<class>com.robo4j.socket.http.units.HttpServerUnit</class>-->
+        <!--<config name="com.robo4j.root">-->
+            <!--<value name="port" type="int">8025</value>-->
+        <!--</config>-->
+    <!--</roboUnit>-->
     <roboUnit id="controller">
         <class>com.robo4j.rpi.lego.controller.controller.RpiLegoController</class>
         <config name="com.robo4j.root">
             <value name="targetOut" type="String">httpClient</value>
-            <value name="client" type="String">192.168.178.26</value>
+            <value name="client" type="String">192.168.0.6</value>
             <value name="clientPort" type="String">8025</value>
             <value name="clientUri" type="String">/units/controller</value>
+        </config>
+    </roboUnit>
+    <roboUnit id="weaponController">
+        <class>com.robo4j.rpi.lego.controller.controller.RpiLegoWeaponController</class>
+        <config name="com.robo4j.root">
+            <value name="targetOut" type="String">httpClient</value>
+            <value name="client" type="String">192.168.0.6</value>
+            <value name="clientPort" type="String">8025</value>
+            <value name="clientUri" type="String">/units/weaponController</value>
         </config>
     </roboUnit>
     <roboUnit id="padController">
         <class>com.robo4j.rpi.lego.controller.controller.LF710LegoController</class>
         <config name="com.robo4j.root">
             <value name="target" type="String">controller</value>
+            <value name="targetWeapon" type="String">weaponController</value>
             <value name="padInput" type="String">gamepad</value>
         </config>
     </roboUnit>

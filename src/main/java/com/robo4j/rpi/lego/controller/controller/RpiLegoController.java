@@ -61,7 +61,7 @@ public class RpiLegoController extends RoboUnit<AdafruitButtonEnum> {
 
     @Override
     public void onMessage(AdafruitButtonEnum message) {
-        processAdaruitMessage(message);
+        processAdafruitMessage(message);
     }
 
     // Private Methods
@@ -69,7 +69,7 @@ public class RpiLegoController extends RoboUnit<AdafruitButtonEnum> {
         ctx.getReference(targetOut).sendMessage(message);
     }
 
-    private void processAdaruitMessage(AdafruitButtonEnum message) {
+    private void processAdafruitMessage(AdafruitButtonEnum message) {
         switch (message) {
             case RIGHT:
                 sendClientMessage(getContext(), RoboHttpUtils.createRequest(HttpMethod.POST, client, clientUri, codec.encode("left")));
