@@ -53,7 +53,6 @@ public class LF710LegoController extends RoboUnit<LF710Message> {
         target = configuration.getString("target", null);
         targetWeapon = configuration.getString("targetWeapon", null);
 
-        System.out.println(getClass() + " init targetWeapon: " + targetWeapon + " target: " + target);
         if (target == null) {
             throw ConfigurationException.createMissingConfigNameException("target");
         }
@@ -75,7 +74,6 @@ public class LF710LegoController extends RoboUnit<LF710Message> {
     }
 
     private void sendWeaponMessage(RoboContext ctx, LF710Button message){
-        System.out.println(getClass().getSimpleName() + " targetWeapon: " + targetWeapon + " message: " + message);
         ctx.getReference(targetWeapon).sendMessage(message);
     }
 
@@ -89,7 +87,6 @@ public class LF710LegoController extends RoboUnit<LF710Message> {
         switch (message.getPart()){
             case BUTTON:
                 if(message.getInput().getName().equals("blue")){
-                    System.out.println(getClass().getSimpleName() + " process BLUE");
                     sendWeaponMessage(getContext(), LF710Button.BLUE);
                 } else {
                     SimpleLoggingUtil.print(getClass(), "Gamepad Buttons are not implemented: " + message);

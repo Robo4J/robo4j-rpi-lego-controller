@@ -72,7 +72,6 @@ public class RpiLegoWeaponController extends RoboUnit<LF710Button> {
 
         String command = pressed ? "forward" : "stop";
         String message = RoboHttpUtils.createRequest(HttpMethod.POST, client, clientUri, codec.encode(new SimpleCommand(command)));
-        System.out.println(getClass().getSimpleName() + " message: " + message);
         ctx.getReference(targetOut).sendMessage(message);
     }
 }
